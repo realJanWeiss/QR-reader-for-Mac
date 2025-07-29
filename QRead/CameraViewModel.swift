@@ -16,11 +16,15 @@ class CameraViewModel: NSObject, ObservableObject {
     @Published var isCameraRunning = false
     @Published var showError = false
     @Published var errorMessage = ""
+    @Published var qrCodeHistory: [String] = []
     
     private var cancellables = Set<AnyCancellable>()
+    private let userDefaults = UserDefaults.standard
+    private let historyKey = "QRCodeHistory"
     
     override init() {
         super.init()
+        loadHistory()
         setupCaptureSession()
     }
     
@@ -96,6 +100,19 @@ class CameraViewModel: NSObject, ObservableObject {
             self?.showError = true
         }
     }
+    
+    private func loadHistory() {
+        if let savedHistory = userDefaults.array(forKey: historyKey) as? [String] {
+            qrCodeHistory = savedHistory
+        }
+    }
+    
+    private func saveHistory(_ qrCode: String) {
+        if !qrCodeHistory.contains(qrCode) {
+            qrCodeHistory.insert(qrCode, at: 0) // Add new QR code at the start
+            userDefaults.set(qrCodeHistory, forKey: historyKey)
+        }
+    }
 }
 
 extension CameraViewModel: AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -119,6 +136,7 @@ extension CameraViewModel: AVCaptureVideoDataOutputSampleBufferDelegate {
             
             DispatchQueue.main.async { [weak self] in
                 self?.detectedQRCode = payload
+                self?.saveHistory(payload)
             }
         }
         

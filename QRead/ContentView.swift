@@ -35,6 +35,28 @@ struct ContentView: View {
                         .cornerRadius(10)
                         .padding()
                 }
+                
+                // History Section
+                VStack(alignment: .leading) {
+                    Text("QR Code History")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 10) {
+                            ForEach(viewModel.qrCodeHistory, id: \.self) { qrCode in
+                                Text(qrCode)
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 4)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(5)
+                            }
+                        }
+                    }
+                    .frame(maxHeight: 150)
+                    .padding(.horizontal)
+                }
             } else {
                 Text("Camera access is required. Please enable it in System Settings.")
                     .foregroundColor(.red)
@@ -51,5 +73,17 @@ struct ContentView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+    }
+}
+
+extension ContentView {
+    var qrCodeDetected: Bool {
+        viewModel.detectedQRCode != nil
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
     }
 }
