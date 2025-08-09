@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = CameraViewModel()
+    @StateObject private var viewModel = CameraViewModel(historyManager: QRCodeHistoryManager())
+    @StateObject private var historyManager = QRCodeHistoryManager()
     
     var body: some View {
         VStack {
@@ -44,13 +45,8 @@ struct ContentView: View {
                     
                     ScrollView {
                         VStack(alignment: .leading, spacing: 10) {
-                            ForEach(viewModel.qrCodeHistory, id: \.self) { qrCode in
-                                Text(qrCode)
-                                    .padding(.horizontal)
-                                    .padding(.vertical, 4)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(5)
+                            ForEach(historyManager.history, id: \.id) { historyItem in
+                                HistoryItemView(item: historyItem)
                             }
                         }
                     }
@@ -79,11 +75,5 @@ struct ContentView: View {
 extension ContentView {
     var qrCodeDetected: Bool {
         viewModel.detectedQRCode != nil
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
