@@ -8,8 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = CameraViewModel(historyManager: QRCodeHistoryManager())
-    @StateObject private var historyManager = QRCodeHistoryManager()
+    @StateObject private var historyManager: QRCodeHistoryManager
+    @StateObject private var viewModel: CameraViewModel
+    
+    init() {
+        let sharedHistoryManager = QRCodeHistoryManager()
+        _historyManager = StateObject(wrappedValue: sharedHistoryManager)
+        _viewModel = StateObject(wrappedValue: CameraViewModel(historyManager: sharedHistoryManager))
+   }
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -33,8 +39,8 @@ struct ContentView: View {
                         
                         ScrollView {
                             VStack(alignment: .leading, spacing: 10) {
-                                ForEach(historyManager.history, id: \.id) { historyItem in
-                                    HistoryItemView(item: historyItem)
+                                ForEach(historyManager.history, id: \.id) { anyHistoryItem in
+                                    HistoryItemView(item: anyHistoryItem.base)
                                 }
                             }
                         }
@@ -58,6 +64,7 @@ struct ContentView: View {
                 dismissButton: .default(Text("OK"))
             )
         }
+        .environmentObject(historyManager)
     }
 }
 
@@ -70,4 +77,5 @@ extension ContentView {
 #Preview(traits: .sizeThatFitsLayout) {
     ContentView()
         .frame(minHeight: 400)
+        .environmentObject(QRCodeHistoryManager())
 }

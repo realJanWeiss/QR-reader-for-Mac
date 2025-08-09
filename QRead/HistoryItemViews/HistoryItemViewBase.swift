@@ -14,6 +14,7 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
     let content: Content
     let actions: Actions?
     
+    @EnvironmentObject var historyManager: QRCodeHistoryManager
     @State private var isHovered = false
 
     init(item: any HistoryItem, iconName: String? = nil,  header: String? = nil, @ViewBuilder content: () -> Content, @ViewBuilder actions: () -> Actions = { EmptyView() }) {
@@ -91,7 +92,7 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
     }
     
     private func onRemove() {
-        QRCodeHistoryManager().removeHistoryItem(withId: self.item.id)
+        historyManager.removeHistoryItem(withId: self.item.id)
     }
 
     private let dateFormatter: DateFormatter = {

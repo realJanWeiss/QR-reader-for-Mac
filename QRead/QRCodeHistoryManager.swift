@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 class QRCodeHistoryManager: ObservableObject {
-    @Published var history: [any HistoryItem] = [] // "any HistoryItem" breaks reactivity in View ...
+    @Published var history: [AnyHistoryItem] = [] // "any HistoryItem" breaks reactivity in View ...
     
     private let historyFileURL: URL = {
         let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -21,7 +21,7 @@ class QRCodeHistoryManager: ObservableObject {
     }
     
     func addHistoryItem(_ item: any HistoryItem) {
-        history.insert(item, at: 0)
+        history.insert(AnyHistoryItem(item), at: 0)
         saveHistory()
     }
 
@@ -40,7 +40,7 @@ class QRCodeHistoryManager: ObservableObject {
    private func saveHistory() {
         let encoder = JSONEncoder()
         do {
-            let data = try encoder.encode(history.map(AnyHistoryItem.init))
+            let data = try encoder.encode(history)
             try data.write(to: historyFileURL)
         } catch {
             print("Failed to save history: \(error)")
@@ -51,8 +51,7 @@ class QRCodeHistoryManager: ObservableObject {
         let decoder = JSONDecoder()
         do {
             let data = try Data(contentsOf: historyFileURL)
-            let anyItems = try decoder.decode([AnyHistoryItem].self, from: data)
-            history = anyItems.map { $0.base }
+            history = try decoder.decode([AnyHistoryItem].self, from: data)
         } catch {
             print("Failed to load history: \(error)")
         }
