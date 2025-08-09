@@ -12,7 +12,7 @@ struct ContentView: View {
     @StateObject private var historyManager = QRCodeHistoryManager()
     
     var body: some View {
-        VStack {
+        ZStack(alignment: .topTrailing) {
             if viewModel.hasCameraAccess {
                 CameraPreviewView(session: viewModel.captureSession)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -21,37 +21,26 @@ struct ContentView: View {
                             .stroke((viewModel.detectedQRCode != nil) ? Color.green : Color.clear, lineWidth: 4)
                     )
                 
-                if let qrCode = viewModel.detectedQRCode {
-                    Text("Detected QR Code: \(qrCode)")
-                        .padding()
-                        .background(Color.black.opacity(0.7))
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding()
-                } else {
-                    Text("No QR Code Detected")
-                        .padding()
-                        .background(Color.black.opacity(0.7))
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .padding()
-                }
-                
                 // History Section
-                VStack(alignment: .leading) {
-                    Text("QR Code History")
-                        .font(.headline)
-                        .padding(.horizontal)
-                    
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 10) {
-                            ForEach(historyManager.history, id: \.id) { historyItem in
-                                HistoryItemView(item: historyItem)
+                if (!historyManager.history.isEmpty) {
+                    VStack(alignment: .leading) {
+                        Text("QR Code History")
+                            .font(.headline)
+                            .padding(.horizontal)
+                            .shadow(
+                                color: Color(NSColor.windowBackgroundColor).opacity(0.3), radius: 3, x: 0, y: 2
+                            )
+                        
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 10) {
+                                ForEach(historyManager.history, id: \.id) { historyItem in
+                                    HistoryItemView(item: historyItem)
+                                }
                             }
                         }
                     }
-                    .frame(maxHeight: 150)
-                    .padding(.horizontal)
+                    .padding(.top)
+                    .frame(maxWidth: 400)
                 }
             } else {
                 Text("Camera access is required. Please enable it in System Settings.")
@@ -76,4 +65,9 @@ extension ContentView {
     var qrCodeDetected: Bool {
         viewModel.detectedQRCode != nil
     }
+}
+
+#Preview(traits: .sizeThatFitsLayout) {
+    ContentView()
+        .frame(minHeight: 400)
 }

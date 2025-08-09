@@ -14,3 +14,7 @@ protocol HistoryItem: Identifiable, Codable {
     static var type: String { get }
     static func parse(from text: String) throws -> Self
 }
+
+enum ParseError: Error {
+    case invalidFormat
+}

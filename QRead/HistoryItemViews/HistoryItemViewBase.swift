@@ -13,6 +13,8 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
     let header: String?
     let content: Content
     let actions: Actions?
+    
+    @State private var isHovered = false
 
     init(item: any HistoryItem, iconName: String? = nil,  header: String? = nil, @ViewBuilder content: () -> Content, @ViewBuilder actions: () -> Actions = { EmptyView() }) {
         self.item = item
@@ -23,7 +25,26 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
     }
     
     var body: some View {
-        HStack(alignment: .top, spacing: 8) {
+        ZStack(alignment: .topLeading) {
+            mainContent
+            
+            if isHovered {
+                DeleteButtonBubble(onRemove: onRemove)
+                    .transition(.scale.combined(with: .opacity))
+                    .padding(-6)
+            }
+        }
+        .padding(.top, 8)
+        .padding(.horizontal, 8)
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.2)) {
+                isHovered = hovering
+            }
+        }
+    }
+    
+    private var mainContent: some View {
+        HStack(alignment: .top, spacing: 12) {
             Group {
                 if let iconName {
                     Image(systemName: iconName)
@@ -37,7 +58,7 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
                 }
             }
            
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     if let header {
                         Text(header)
@@ -64,10 +85,13 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.gray.opacity(0.1))
+        .background(Color(NSColor.windowBackgroundColor))
         .cornerRadius(12)
         .shadow(radius: 5)
-                
+    }
+    
+    private func onRemove() {
+        QRCodeHistoryManager().removeHistoryItem(withId: self.item.id)
     }
 
     private let dateFormatter: DateFormatter = {
@@ -79,10 +103,11 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
 }
 
 #Preview {
-    return HistoryItemViewBase(item: PlainData(id: UUID(), dateScanned: Date(), text: "This is example text. It could be very very long."), iconName: "text.document", header: "Category"
+    HistoryItemViewBase(item: PlainData(id: UUID(), dateScanned: Date(), text: "This is example text. It could be very very long."), iconName: "text.document", header: "Category"
     ) {
         Text("Content")
     } actions: {
         Button("Action", action: {})
     }
+    .frame(maxWidth: 400)
 }

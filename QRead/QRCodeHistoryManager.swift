@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 class QRCodeHistoryManager: ObservableObject {
-    @Published var history: [any HistoryItem] = []
+    @Published var history: [any HistoryItem] = [] // "any HistoryItem" breaks reactivity in View ...
     
     private let historyFileURL: URL = {
         let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -30,6 +30,11 @@ class QRCodeHistoryManager: ObservableObject {
             history.remove(at: index)
             saveHistory()
         }
+    }
+    
+    func clearHistory() {
+        history.removeAll()
+        saveHistory()
     }
     
    private func saveHistory() {

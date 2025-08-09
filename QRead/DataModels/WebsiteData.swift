@@ -18,7 +18,7 @@ struct WebsiteData: HistoryItem {
         let url = URL(string: text.trimmingCharacters(in: .whitespacesAndNewlines))
         let scheme = url!.scheme
         if (!["http", "https"].contains(scheme)) {
-            throw NSError(domain: "WebsiteDataError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL scheme"])
+            throw ParseError.invalidFormat
         }
 
         return .init(

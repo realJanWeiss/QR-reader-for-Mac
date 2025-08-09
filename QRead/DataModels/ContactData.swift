@@ -14,10 +14,23 @@ struct ContactData: HistoryItem {
     var contacts: [Contact]
 
     static var type: String { "contact" }
-    
+
     static func parse(from text: String) throws -> ContactData {
-        let contacts = try CNContactVCardSerialization.contacts(with: text.data(using: .utf8)!)
-        return .init(id: UUID(), dateScanned: Date(), contacts: contacts.map { Contact(contact: $0) })
+        guard let data = text.data(using: .utf8) else {
+            throw ParseError.invalidFormat
+        }
+        
+        let contacts = try CNContactVCardSerialization.contacts(with: data)
+        
+        if contacts.isEmpty {
+            throw ParseError.invalidFormat
+        }
+        
+        return .init(
+            id: UUID(),
+            dateScanned: Date(),
+            contacts: contacts.map { Contact(contact: $0) }
+        )
     }
 }
 
