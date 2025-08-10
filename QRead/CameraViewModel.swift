@@ -121,7 +121,7 @@ extension CameraViewModel: AVCaptureVideoDataOutputSampleBufferDelegate {
             
             DispatchQueue.main.async { [weak self] in
                 self?.detectedQRCode = payload
-                self?.historyManager.addHistoryItem(QRCodeUtils.historyItemFromQRCode(payload))
+                self?.historyManager.addHistoryItem(payload)
             }
         }
         

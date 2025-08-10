@@ -8,16 +8,20 @@
 import SwiftUI
 
 struct HistoryItemView: View {
-    let item: any HistoryItem
+    let item: HistoryItem
 
     var body: some View {
-        if let contact = item as? ContactData {
-            HistoryItemViewContact(item: contact)
-        } else if let plain = item as? PlainData {
-            HistoryItemViewPlain(item: plain)
-        } else if let website = item as? WebsiteData {
-            HistoryItemViewWebsite(item: website)
-        } else {
+        switch item.data.base {
+        case let data as ContactData:
+            HistoryItemViewContact(item: item, data: data)
+
+        case let data as WebsiteData:
+            HistoryItemViewWebsite(item: item, data: data)
+
+        case let data as PlainData:
+            HistoryItemViewPlain(item: item, data: data)
+
+        default:
             EmptyView()
         }
     }

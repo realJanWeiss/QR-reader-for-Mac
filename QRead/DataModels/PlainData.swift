@@ -7,14 +7,12 @@
 
 import Foundation
 
-struct PlainData: HistoryItem {
-    var id: UUID
-    var dateScanned: Date
+struct PlainData: HistoryItemData {
     var text: String
 
     static var type: String { "plain" }
     
     static func parse(from text: String) -> PlainData {
-        return .init(id: UUID(), dateScanned: Date(), text: text)
+        return .init(text: text)
     }
 }

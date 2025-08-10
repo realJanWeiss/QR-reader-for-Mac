@@ -7,9 +7,7 @@
 
 import Foundation
 
-struct WebsiteData: HistoryItem {
-    var id: UUID
-    var dateScanned: Date
+struct WebsiteData: HistoryItemData {
     var url: String
 
     static var type: String { "website" }
@@ -22,8 +20,6 @@ struct WebsiteData: HistoryItem {
         }
 
         return .init(
-            id: UUID(),
-            dateScanned: Date(),
             url: text
         )
     }

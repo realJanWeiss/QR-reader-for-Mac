@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct HistoryItemViewWebsite: View {
-    let item: WebsiteData
+    let item: HistoryItem
+    let data: WebsiteData
     
     var body: some View {
         HistoryItemViewBase(item: item, iconName: "link", header: "Website") {
-            Text(item.url)
+            Text(data.url)
         } actions: {
             Button("open", action: {})
         }
@@ -20,5 +21,8 @@ struct HistoryItemViewWebsite: View {
 }
 
 #Preview {
-    HistoryItemViewWebsite(item: WebsiteData(id: UUID(), dateScanned: Date(), url: "https://www.google.com"))
+    HistoryItemViewWebsite(
+        item: HistoryItem(""),
+        data: WebsiteData(url: "https://www.google.com")
+    )
 }

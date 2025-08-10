@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HistoryItemViewBase<Content: View, Actions: View>: View {
-    let item: any HistoryItem
+    let item: HistoryItem
     let iconName: String?
     let header: String?
     let content: Content
@@ -17,7 +17,7 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
     @EnvironmentObject var historyManager: QRCodeHistoryManager
     @State private var isHovered = false
 
-    init(item: any HistoryItem, iconName: String? = nil,  header: String? = nil, @ViewBuilder content: () -> Content, @ViewBuilder actions: () -> Actions = { EmptyView() }) {
+    init(item: HistoryItem, iconName: String? = nil,  header: String? = nil, @ViewBuilder content: () -> Content, @ViewBuilder actions: () -> Actions = { EmptyView() }) {
         self.item = item
         self.iconName = iconName
         self.header = header
@@ -104,7 +104,12 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
 }
 
 #Preview {
-    HistoryItemViewBase(item: PlainData(id: UUID(), dateScanned: Date(), text: "This is example text. It could be very very long."), iconName: "text.document", header: "Category"
+    HistoryItemViewBase(
+        item: HistoryItem(
+            "This is example text. It could be very very long."
+        ),
+        iconName: "text.document",
+        header: "Category"
     ) {
         Text("Content")
     } actions: {

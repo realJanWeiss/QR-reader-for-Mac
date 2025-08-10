@@ -9,15 +9,17 @@ import Foundation
 
 class QRCodeUtils {
     
-    static func historyItemFromQRCode(_ qrCode: String) -> any HistoryItem {
+    static func historyItemDataFromQRCode(_ qrCode: String) -> AnyHistoryItemData {
+        var data: HistoryItemData
         do {
-            return try ContactData.parse(from: qrCode)
+            data = try ContactData.parse(from: qrCode)
         } catch {
             do {
-                return try WebsiteData.parse(from: qrCode)
+                data = try WebsiteData.parse(from: qrCode)
             } catch {
-                return PlainData.parse(from: qrCode)
+                data = PlainData.parse(from: qrCode)
             }
         }
+        return AnyHistoryItemData(data)
     }
 }

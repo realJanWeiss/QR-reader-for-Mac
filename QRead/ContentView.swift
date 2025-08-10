@@ -39,8 +39,8 @@ struct ContentView: View {
                         
                         ScrollView {
                             VStack(alignment: .leading, spacing: 10) {
-                                ForEach(historyManager.history, id: \.id) { anyHistoryItem in
-                                    HistoryItemView(item: anyHistoryItem.base)
+                                ForEach(historyManager.history, id: \.id) { historyItem in
+                                    HistoryItemView(item: historyItem)
                                 }
                             }
                         }

@@ -8,15 +8,19 @@
 import SwiftUI
 
 struct HistoryItemViewPlain: View {
-    let item: PlainData
+    let item: HistoryItem
+    let data: PlainData
 
     var body: some View {
         HistoryItemViewBase(item: item, iconName: "text.document", header: "Plain text") {
-            Text(item.text)
+            Text(data.text)
         }
     }
 }
 
 #Preview {
-    return HistoryItemViewPlain(item: PlainData(id: UUID(), dateScanned: Date(), text: "This is example text. It could be very very long."))
+    return HistoryItemViewPlain(
+        item: HistoryItem(""),
+        data: PlainData(text: "This is example text. It could be very very long.")
+    )
 }

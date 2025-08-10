@@ -8,9 +8,7 @@
 import Foundation
 import Contacts
 
-struct ContactData: HistoryItem {
-    var id: UUID
-    var dateScanned: Date
+struct ContactData: HistoryItemData {
     var contacts: [Contact]
 
     static var type: String { "contact" }
@@ -27,8 +25,6 @@ struct ContactData: HistoryItem {
         }
         
         return .init(
-            id: UUID(),
-            dateScanned: Date(),
             contacts: contacts.map { Contact(contact: $0) }
         )
     }
