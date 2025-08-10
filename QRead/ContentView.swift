@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var historyManager: QRCodeHistoryManager
     @StateObject private var viewModel: CameraViewModel
-    
+
     init() {
         let sharedHistoryManager = QRCodeHistoryManager()
         _historyManager = StateObject(wrappedValue: sharedHistoryManager)
@@ -24,29 +24,12 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .overlay(
                         Rectangle()
-                            .stroke((viewModel.detectedQRCode != nil) ? Color.green : Color.clear, lineWidth: 4)
+                            .stroke(viewModel.detectedQRCode != nil ? .green : .clear, lineWidth: 4)
                     )
-                
-                // History Section
-                if (!historyManager.history.isEmpty) {
-                    VStack(alignment: .leading) {
-                        Text("QR Code History")
-                            .font(.headline)
-                            .padding(.horizontal)
-                            .shadow(
-                                color: Color(NSColor.windowBackgroundColor).opacity(0.3), radius: 3, x: 0, y: 2
-                            )
-                        
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 10) {
-                                ForEach(historyManager.history, id: \.id) { historyItem in
-                                    HistoryItemView(item: historyItem)
-                                }
-                            }
-                        }
-                    }
-                    .padding(.top)
-                    .frame(maxWidth: 400)
+
+                if !historyManager.history.isEmpty {
+                    HistoryView()
+                        .frame(maxWidth: 400)
                 }
             } else {
                 Text("Camera access is required. Please enable it in System Settings.")
@@ -54,9 +37,7 @@ struct ContentView: View {
                     .padding()
             }
         }
-        .onAppear {
-            viewModel.requestCameraAccess()
-        }
+        .onAppear(perform: viewModel.requestCameraAccess)
         .alert(isPresented: $viewModel.showError) {
             Alert(
                 title: Text("Error"),
@@ -68,14 +49,7 @@ struct ContentView: View {
     }
 }
 
-extension ContentView {
-    var qrCodeDetected: Bool {
-        viewModel.detectedQRCode != nil
-    }
-}
-
 #Preview(traits: .sizeThatFitsLayout) {
     ContentView()
         .frame(minHeight: 400)
-        .environmentObject(QRCodeHistoryManager())
 }
