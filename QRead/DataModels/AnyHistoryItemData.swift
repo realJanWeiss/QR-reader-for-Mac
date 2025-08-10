@@ -15,12 +15,7 @@ struct AnyHistoryItemData: HistoryItemData {
         throw ParseError.invalidFormat
     }
 
-    func encode(to encoder: Encoder) throws {
-        try base.encode(to: encoder)
-    }
-
     init(from decoder: Decoder) throws {
-        // You need to implement decoding logic based on a type discriminator
         throw ParseError.invalidFormat
     }
 }

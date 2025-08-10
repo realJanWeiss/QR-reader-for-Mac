@@ -12,7 +12,14 @@ struct HistoryItemViewPlain: View {
     let data: PlainData
 
     var body: some View {
-        HistoryItemViewBase(item: item, iconName: "text.document", header: "Plain text") {
+        HistoryItemViewBase(
+            item: item,
+            iconName: "text.document",
+            header: "Plain text",
+            performCopy: {
+                $0.setString(data.text, forType: .string)
+            }
+        ) {
             Text(data.text)
         }
     }

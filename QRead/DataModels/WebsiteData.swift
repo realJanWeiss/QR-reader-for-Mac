@@ -8,19 +8,17 @@
 import Foundation
 
 struct WebsiteData: HistoryItemData {
-    var url: String
+    var url: URL
 
     static var type: String { "website" }
     
     static func parse(from text: String) throws -> WebsiteData {
-        let url = URL(string: text.trimmingCharacters(in: .whitespacesAndNewlines))
-        let scheme = url!.scheme
-        if (!["http", "https"].contains(scheme)) {
-            throw ParseError.invalidFormat
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let url = URL(string: trimmed),
+              let scheme = url.scheme,
+              ["http", "https"].contains(scheme) else {
+                throw ParseError.invalidFormat
         }
-
-        return .init(
-            url: text
-        )
+        return .init(url: url)
     }
 }

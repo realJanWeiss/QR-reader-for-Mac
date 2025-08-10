@@ -12,10 +12,19 @@ struct HistoryItemViewWebsite: View {
     let data: WebsiteData
     
     var body: some View {
-        HistoryItemViewBase(item: item, iconName: "link", header: "Website") {
-            Text(data.url)
+        HistoryItemViewBase(
+            item: item,
+            iconName: "link",
+            header: "Website",
+            performCopy: {
+                $0.setString(data.url.absoluteString, forType: .URL)
+            }
+        ) {
+            Text(data.url.absoluteString)
         } actions: {
-            Button("open", action: {})
+            Button("Open", action: {
+                NSWorkspace.shared.open(data.url)
+            })
         }
     }
 }
@@ -23,6 +32,6 @@ struct HistoryItemViewWebsite: View {
 #Preview {
     HistoryItemViewWebsite(
         item: HistoryItem(""),
-        data: WebsiteData(url: "https://www.google.com")
+        data: WebsiteData(url: URL(string: "https://www.google.com")!)
     )
 }

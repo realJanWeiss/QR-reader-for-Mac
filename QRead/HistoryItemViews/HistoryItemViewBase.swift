@@ -6,21 +6,31 @@
 //
 
 import SwiftUI
+import AppKit
 
 struct HistoryItemViewBase<Content: View, Actions: View>: View {
     let item: HistoryItem
     let iconName: String?
     let header: String?
+    let performCopy: (NSPasteboard) -> Void
     let content: Content
     let actions: Actions?
     
     @EnvironmentObject var historyManager: QRCodeHistoryManager
     @State private var isHovered = false
 
-    init(item: HistoryItem, iconName: String? = nil,  header: String? = nil, @ViewBuilder content: () -> Content, @ViewBuilder actions: () -> Actions = { EmptyView() }) {
+    init(
+        item: HistoryItem,
+        iconName: String? = nil,
+        header: String? = nil,
+        performCopy: @escaping (NSPasteboard) -> Void,
+        @ViewBuilder content: () -> Content,
+        @ViewBuilder actions: () -> Actions = { EmptyView() }
+    ) {
         self.item = item
         self.iconName = iconName
         self.header = header
+        self.performCopy = performCopy
         self.content = content()
         self.actions = actions()
     }
@@ -80,6 +90,7 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
                     .foregroundColor(.primary)
                 HStack {
                     actions
+                    Button("Copy", action: onCopy)
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
@@ -93,6 +104,12 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
     
     private func onRemove() {
         historyManager.removeHistoryItem(withId: self.item.id)
+    }
+    
+    private func onCopy() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        performCopy(pasteboard)
     }
 
     private let dateFormatter: DateFormatter = {
@@ -109,7 +126,8 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
             "This is example text. It could be very very long."
         ),
         iconName: "text.document",
-        header: "Category"
+        header: "Category",
+        performCopy: { $0.setString("Text", forType: .string) }
     ) {
         Text("Content")
     } actions: {

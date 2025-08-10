@@ -9,7 +9,7 @@ import Foundation
 import Contacts
 
 struct ContactData: HistoryItemData {
-    var contacts: [Contact]
+    var contacts: [CNContact]
 
     static var type: String { "contact" }
 
@@ -25,25 +25,25 @@ struct ContactData: HistoryItemData {
         }
         
         return .init(
-            contacts: contacts.map { Contact(contact: $0) }
+            contacts: contacts
         )
     }
 }
 
-struct Contact: Codable {
-    var givenName: String
-    var familyName: String
-    var phoneNumbers: [String]
-    
-    init(givenName: String, familyName: String, phoneNumbers: [String]) {
-        self.givenName = givenName
-        self.familyName = familyName
-        self.phoneNumbers = phoneNumbers
-    }
-    
-    init(contact: CNContact) {
-        self.givenName = contact.givenName
-        self.familyName = contact.familyName
-        self.phoneNumbers = contact.phoneNumbers.map { $0.value.stringValue }
-    }
-}
+//struct Contact: Codable {
+//    var givenName: String
+//    var familyName: String
+//    var phoneNumbers: [String]
+//    
+//    init(givenName: String, familyName: String, phoneNumbers: [String]) {
+//        self.givenName = givenName
+//        self.familyName = familyName
+//        self.phoneNumbers = phoneNumbers
+//    }
+//    
+//    init(contact: CNContact) {
+//        self.givenName = contact.givenName
+//        self.familyName = contact.familyName
+//        self.phoneNumbers = contact.phoneNumbers.map { $0.value.stringValue }
+//    }
+//}

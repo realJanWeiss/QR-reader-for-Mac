@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol HistoryItemData: Codable {
+protocol HistoryItemData {
     static var type: String { get }
     static func parse(from text: String) throws -> Self
 }
