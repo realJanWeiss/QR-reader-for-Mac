@@ -14,9 +14,10 @@ struct HistoryView: View {
         VStack(alignment: .leading) {
             Text("QR Code History")
                 .font(.headline)
+                .foregroundStyle(.white)
                 .padding(.horizontal)
                 .shadow(
-                    color: Color(NSColor.windowBackgroundColor).opacity(0.3), radius: 3, x: 0, y: 2
+                    color: .black.opacity(0.3), radius: 3, x: 0, y: 2
                 )
             
             ScrollView {
