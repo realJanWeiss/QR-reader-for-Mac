@@ -1,5 +1,5 @@
 //
-//  HistoryModel.swift
+//  QRCodeHistoryManager.swift
 //  QRead
 //
 //  Created by Jan on 29.07.25.
