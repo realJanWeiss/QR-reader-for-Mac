@@ -43,6 +43,7 @@ struct HistoryItemViewBase<Content: View, Actions: View>: View {
                 DeleteButtonBubble(onRemove: onRemove)
                     .transition(.scale.combined(with: .opacity))
                     .padding(-6)
+                    .zIndex(1)
             }
         }
         .padding(.top, 8)
