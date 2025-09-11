@@ -29,21 +29,3 @@ struct ContactData: HistoryItemData {
         )
     }
 }
-
-//struct Contact: Codable {
-//    var givenName: String
-//    var familyName: String
-//    var phoneNumbers: [String]
-//    
-//    init(givenName: String, familyName: String, phoneNumbers: [String]) {
-//        self.givenName = givenName
-//        self.familyName = familyName
-//        self.phoneNumbers = phoneNumbers
-//    }
-//    
-//    init(contact: CNContact) {
-//        self.givenName = contact.givenName
-//        self.familyName = contact.familyName
-//        self.phoneNumbers = contact.phoneNumbers.map { $0.value.stringValue }
-//    }
-//}
