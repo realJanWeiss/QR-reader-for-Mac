@@ -2,6 +2,8 @@
 
 Ever come across a QR code on your MacBook and wished you could scan it directly without reaching for your phone? This app makes that possible.
 
+![Banner with the app logo and a colorful background](public/QR-Reader-for-Mac-Logo.jpg)
+
 ## Features
 
 - Scan QR codes using your MacBook’s built-in camera
@@ -16,7 +18,7 @@ Future versions may include more data types — contributions are welcome!
 
 Simply launch the app, point your MacBook’s camera at a QR code, and the app will recognize it instantly. Your scans are stored in your history so you can revisit them at any time.
 
-*(A demo video will be added here soon.)*
+![Screenshot of the application which shows a qr code being scanned and the list of previously scanned codes.](public/QR-Reader-for-Mac-screenshot.jpg)
 
 ## Contributing
 
@@ -34,7 +36,7 @@ We welcome pull requests and improvements from the community.
 To run the project locally:
 
 1. Clone the repository
-2. Open the project in **Xcode**
+2. Open the project in Xcode
 3. Build and run
 
 That’s it — you’re ready to go!
