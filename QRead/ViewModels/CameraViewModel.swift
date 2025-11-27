@@ -18,6 +18,9 @@ class CameraViewModel: NSObject, ObservableObject {
 
     private let historyManager: QRCodeHistoryManager
 
+    private let detectionInterval: TimeInterval = 0.5
+    private var lastDetectionTime: TimeInterval = 0
+
     init(historyManager: QRCodeHistoryManager) {
         self.historyManager = historyManager
         super.init()
@@ -93,6 +96,10 @@ class CameraViewModel: NSObject, ObservableObject {
 
 extension CameraViewModel: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        let currentTime = CACurrentMediaTime()
+        guard currentTime - lastDetectionTime >= detectionInterval else { return }
+        lastDetectionTime = currentTime
+
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
         
         let request = VNDetectBarcodesRequest { [weak self] request, error in
