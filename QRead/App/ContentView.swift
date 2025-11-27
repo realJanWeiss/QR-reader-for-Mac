@@ -22,10 +22,6 @@ struct ContentView: View {
             if viewModel.hasCameraAccess {
                 CameraPreviewView(session: viewModel.captureSession)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .overlay(
-                        Rectangle()
-                            .stroke(viewModel.detectedQRCode != nil ? .green : .clear, lineWidth: 4)
-                    )
 
                 if !historyManager.history.isEmpty {
                     HistoryView()

@@ -1,21 +1,9 @@
 import Foundation
 
-struct AnyHistoryItemData: HistoryItemData {
+struct AnyHistoryItemData {
     let base: HistoryItemData
-
-    static var type: String {
-        "any"
-    }
 
     init(_ base: HistoryItemData) {
         self.base = base
-    }
-
-    static func parse(from text: String) throws -> AnyHistoryItemData {
-        throw ParseError.invalidFormat
-    }
-
-    init(from decoder: Decoder) throws {
-        throw ParseError.invalidFormat
     }
 }
